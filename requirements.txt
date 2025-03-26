@@ -1,0 +1,11 @@
+streamlit
+torch
+numpy
+matplotlib
+seaborn
+wordcloud
+transformers
+safetensors
+tensorflow
+langchain-core
+langchain-huggingface
