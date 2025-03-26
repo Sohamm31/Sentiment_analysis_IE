@@ -10,9 +10,9 @@ from safetensors.torch import load_file
 from tensorflow.keras.preprocessing.sequence import pad_sequences
 from langchain_core.messages import SystemMessage, HumanMessage
 from langchain_huggingface import ChatHuggingFace, HuggingFaceEndpoint
-from dotenv import load_dotenv
 
-load_dotenv()
+# 🔹 Load Hugging Face API Token from Streamlit Secrets
+HUGGINGFACEHUB_API_TOKEN = st.secrets["HUGGINGFACEHUB_API_TOKEN"]
 
 # 🔹 Load Sentiment Analysis Models
 lstm_model = pickle.load(open("LSTM_MODEL.pkl", "rb"))
@@ -21,6 +21,7 @@ lstm_tokenizer = pickle.load(open("tokenizer_LSTM.pkl", "rb"))
 rf_model = pickle.load(open("sentiment_model.pkl", "rb"))
 rf_vect = pickle.load(open("vectorizer.pkl", "rb"))
 
+# 🔹 Load BERT Model
 model_dir = "BERT_MODEL_SAVED"
 model_weights = f"{model_dir}/model.safetensors"
 bert_tokenizer = DistilBertTokenizer.from_pretrained(model_dir)
@@ -32,13 +33,17 @@ bert_model.to(device)
 bert_model.eval()
 
 # 🔹 Load Hugging Face Model for Summarization
-llm = HuggingFaceEndpoint(repo_id="HuggingFaceH4/zephyr-7b-alpha", task="text-generation")
+llm = HuggingFaceEndpoint(
+    repo_id="HuggingFaceH4/zephyr-7b-alpha",
+    task="text-generation",
+    token=HUGGINGFACEHUB_API_TOKEN  # 🔹 Use API token securely
+)
+
 model = ChatHuggingFace(llm=llm)
 
 # 🔹 Streamlit UI Enhancements
 st.set_page_config(page_title="Sentiment Analysis", layout="centered", page_icon="📊")
-
-st.title(" Sentiment Analysis Dashboard")
+st.title("Sentiment Analysis Dashboard")
 st.markdown("<hr style='border:1px solid #ddd;'>", unsafe_allow_html=True)
 
 review_text = st.text_area("✍️ Enter Review", height=120)
