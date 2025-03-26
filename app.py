@@ -46,7 +46,7 @@ st.set_page_config(page_title="Sentiment Analysis", layout="centered", page_icon
 st.title("Sentiment Analysis Dashboard")
 st.markdown("<hr style='border:1px solid #ddd;'>", unsafe_allow_html=True)
 
-review_text = st.text_area("✍️ Enter Review", height=120)
+review_text = st.text_area("Enter Review", height=120)
 
 # 🔹 Sentiment Prediction Functions
 def predict_sentiment_bert(text):
